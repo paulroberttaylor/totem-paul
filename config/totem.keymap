@@ -1,0 +1,93 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/mouse.h>
+
+#define BASE 0
+#define NAV  1
+#define SYM  2
+#define ADJ  3
+
+// Home-row mod settings
+&mt {
+    quick-tap-ms = <100>;
+    global-quick-tap;
+    flavor = "tap-preferred";
+    tapping-term-ms = <170>;
+};
+
+/ {
+    combos {
+        compatible = "zmk,combos";
+        combo_esc {
+            timeout-ms = <50>;
+            key-positions = <0 1>;
+            bindings = <&kp ESC>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        base_layer {
+            label = "BASE";
+// Colemak DH with home-row mods
+//             Q       W       F       P       G           J       L       U       Y       ;
+//             A/GUI   R/ALT   S/CTRL  T/SHFT  D           H       N/SHFT  E/CTRL  I/ALT   O/GUI
+//   ESC       Z       X       C       V       B           K       M       ,       .       /       \
+//                             DEL     TAB/NAV SPACE       ENTER   ESC/SYM BSPC
+            bindings = <
+                &kp Q       &kp W       &kp F       &kp P       &kp G           &kp J       &kp L       &kp U       &kp Y       &kp SEMI
+                &mt LGUI A  &mt LALT R  &mt LCTRL S &mt LSHFT T &kp D           &kp H       &mt RSHFT N &mt RCTRL E &mt RALT I  &mt RGUI O
+    &kp ESC     &kp Z       &kp X       &kp C       &kp V       &kp B           &kp K       &kp M       &kp COMMA   &kp DOT     &kp FSLH    &kp BSLH
+                                        &kp DEL   &lt NAV TAB   &kp SPACE       &kp RET   &lt SYM ESC   &kp BSPC
+            >;
+        };
+
+        nav_layer {
+            label = "NAV";
+// Navigation + numbers
+//             ESC     HOME    UP      END     {           }       7       8       9       +
+//             SHIFT   LEFT    DOWN    RIGHT   [           ]       4       5       6       -
+//   ___       DEL     PG_UP   CAPS    PG_DN   (           )       1       2       3       =       ___
+//                             ___     ___     ___         ADJ     0       .
+            bindings = <
+                &kp ESC     &kp HOME    &kp UP      &kp END     &kp LBRC        &kp RBRC    &kp N7      &kp N8      &kp N9      &kp PLUS
+                &kp LSHFT   &kp LEFT    &kp DOWN    &kp RIGHT   &kp LBKT        &kp RBKT    &kp N4      &kp N5      &kp N6      &kp MINUS
+    &trans      &kp DEL     &kp PG_UP   &kp CAPS    &kp PG_DN   &kp LPAR        &kp RPAR    &kp N1      &kp N2      &kp N3      &kp EQUAL   &trans
+                                        &trans      &trans      &trans          &mo ADJ     &kp N0      &kp DOT
+            >;
+        };
+
+        sym_layer {
+            label = "SYM";
+// Symbols + media
+//             !       @       #       $       %           ^       &       *       '       "
+//             ~       `       _       |       TAB         MUTE    SHFT    CTRL    ALT     GUI
+//   ___       ___     ___     ___     ___     ___         VOL-    VOL+    PREV    NEXT    \       ___
+//                             ___     ___     ADJ         ___     PLAY    ___
+            bindings = <
+                &kp EXCL    &kp AT      &kp HASH    &kp DLLR    &kp PRCNT       &kp CARET   &kp AMPS    &kp ASTRK   &kp SQT     &kp DQT
+                &kp TILDE   &kp GRAVE   &kp UNDER   &kp PIPE    &kp TAB         &kp C_MUTE  &kp RSHFT   &kp RCTRL   &kp RALT    &kp RGUI
+    &trans      &trans      &trans      &trans      &trans      &trans          &kp C_VOL_DN &kp C_VOL_UP &kp C_PREV &kp C_NEXT  &kp BSLH    &trans
+                                        &trans      &trans      &mo ADJ         &trans      &kp C_PP    &trans
+            >;
+        };
+
+        adjust_layer {
+            label = "ADJ";
+// F-keys + Bluetooth + system
+//             RESET   BT_CLR  OUT_TOG ___     ___         ___     F7      F8      F9      F12
+//             BOOT    BT_NXT  ___     ___     ___         ___     F4      F5      F6      F11
+//   ___       ___     BT_PRV  BT 0    BT 1    BT 2        ___     F1      F2      F3      F10     ___
+//                             ___     ___     ___         ___     ___     ___
+            bindings = <
+                &sys_reset  &bt BT_CLR &out OUT_TOG &trans      &trans          &trans      &kp F7      &kp F8      &kp F9      &kp F12
+                &bootloader &bt BT_NXT  &trans      &trans      &trans          &trans      &kp F4      &kp F5      &kp F6      &kp F11
+    &trans      &trans     &bt BT_PRV &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2   &trans      &kp F1      &kp F2      &kp F3      &kp F10     &trans
+                                        &trans      &trans      &trans          &trans      &trans      &trans
+            >;
+        };
+    };
+};
