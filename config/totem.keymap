@@ -28,10 +28,10 @@
     combos {
         compatible = "zmk,combos";
 
-        // Tilde: f + p (positions 3 + 4)
+        // Tilde: f + p (positions 2 + 3)
         combo_tilde {
             timeout-ms = <50>;
-            key-positions = <3 4>;
+            key-positions = <2 3>;
             bindings = <&kp TILDE>;
             layers = <BASE>;
         };
