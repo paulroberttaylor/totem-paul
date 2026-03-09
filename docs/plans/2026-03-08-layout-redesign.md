@@ -15,7 +15,6 @@ and Claude Code. Must not sacrifice the ability to code in the future.
 - Separate NUM and NAV layers (not combined)
 - SYM layer reorganized around actual usage
 - MOUSE layer toggled via both inner thumbs
-- Japanese kana layer for language input
 - Future VIM layer ready when needed (remap vim to match n/e/i/o directions)
 
 ## Dependencies
@@ -43,25 +42,6 @@ Provides:
 - **`ZMK_MOD_MORPH`** — modifier-dependent key behavior
 - **`ZMK_UNICODE_SINGLE`** / **`ZMK_UNICODE_PAIR`** — direct Unicode character output
 - **Key labels for Totem** (`totem.h`) — human-readable position names
-
-### zmk-naginata (eswai)
-
-Add to `config/west.yml`:
-
-```yaml
-manifest:
-  remotes:
-    - name: eswai
-      url-base: https://github.com/eswai
-  projects:
-    - name: zmk-naginata
-      remote: eswai
-      revision: main
-```
-
-Provides:
-- **`&ng` behavior** — naginata-style Japanese kana input via simultaneous keypresses
-- Self-contained combo → kana mapping (no manual macro definitions needed)
 
 ---
 
@@ -134,8 +114,6 @@ Provides:
 | Tap combo | Layer |
 |---|---|
 | `LH2` + `RH0` (both inner thumbs) | MOUSE |
-| TBD | KANA (Japanese input) |
-
 **Safety layer:**
 
 | Hold combo | Layer |
@@ -357,98 +335,6 @@ Hardest combo to trigger accidentally. Only reset/bootloader.
 
 ---
 
-### MOUSE (Layer 5) — Toggle: tap both inner thumbs `LH2` + `RH0`
-
-Both hands completely free after toggle.
-
-```
-      ┌─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┐
-      │ ___ │ ___ │M_CLK│ ___ │ ___ │   │ ___ │ ___ │ ___ │ ___ │ ___ │
-┌─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┐
-│ ___ │ ___ │RCLK │LCLK │MCLK │ ___ │   │ ___ │ MV← │ MV↓ │ MV↑ │ MV→ │ ___ │
-└─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┘
-      │ ___ │ ___ │ ___ │ ___ │ ___ │   │ ___ │SC_L │SC_DN│SC_UP│SC_R │
-      └─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┘
-                  ┌─────┬─────┬─────┐   ┌─────┬─────┬─────┐
-                  │ TOG │ ___ │ ___ │   │LCLK │ ___ │ ___ │
-                  └─────┴─────┴─────┘   └─────┴─────┴─────┘
-```
-
-**Design rationale:**
-- **Mouse movement on `RM1`/`RM2`/`RM3`/`RM4` (n/e/i/o)** — same positions as NAV arrows, zero finger movement
-- **Scroll on `RB1`/`RB2`/`RB3`/`RB4` (h/,/./slash)** — same columns, one row down
-- **Clicks on left home row** — LCLK on `LM2` (s/index), RCLK on `LM3` (r/middle), MCLK on `LM1` (t/ring)
-- **LCLK also on right inner thumb `RH0`** — easy single-hand click while moving
-- **TOG on left inner thumb `LH2`** — tap again to exit
-
----
-
-## Japanese Input: Naginata-Style (薙刀式)
-
-### What is Naginata-Style?
-
-Naginata-style (薙刀式) is a purpose-built Japanese kana input method designed by Toshihiko Ōoka. Instead of sequential romaji typing (k → a → か), it uses **simultaneous key presses** to output kana directly. One combo = one kana character, making it faster than romaji once learned.
-
-### Why Naginata over Romaji Macros?
-
-- **Proven system** — complete, maintained ZMK module (`zmk-naginata`)
-- **No hand-rolled macros** — the module handles all combo → kana mapping internally
-- **Faster input** — simultaneous press vs sequential keystrokes
-- **Works with Japanese IME** — kanji conversion still available
-- **Clean integration** — uses a custom `&ng` behavior, contained in its own layer
-
-### Integration
-
-Add `zmk-naginata` as a module in `config/west.yml`:
-
-```yaml
-manifest:
-  remotes:
-    - name: eswai
-      url-base: https://github.com/eswai
-  projects:
-    - name: zmk-naginata
-      remote: eswai
-      revision: main
-```
-
-### NAGINATA Layer — Toggle via `RH1` + `RH2` (BSPC + NAV)
-
-The naginata layer uses `&ng` bindings instead of `&kp`. The module internally handles simultaneous keypresses to produce kana.
-
-```
-NAGINATA — Japanese Kana Input (薙刀式)
-      ┌─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┐
-      │&ng Q│&ng W│&ng E│&ng R│&ng T│   │&ng Y│&ng U│&ng I│&ng O│&ng P│
-┌─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┐
-│ ___ │&ng A│&ng S│&ng D│&ng F│&ng G│   │&ng H│&ng J│&ng K│&ng L│&ng ;│ ___ │
-└─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┘
-      │&ng Z│&ng X│&ng C│&ng V│&ng B│   │&ng N│&ng M│&ng ,│&ng .│&ng /│
-      └─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┘
-                  ┌─────┬─────┬─────┐   ┌─────┬─────┬─────┐
-                  │SHIFT│ ___ │&ng  │   │&ng  │ ___ │ ___ │
-                  │     │     │SPACE│   │ENTER│     │     │
-                  └─────┴─────┴─────┘   └─────┴─────┴─────┘
-```
-
-**Note:** The `&ng` bindings use QWERTY keycodes regardless of our Colemak DHm base layer — the naginata module maps these internally to kana. The physical key positions matter, not the letters.
-
-**Activation:**
-- **Enter naginata mode:** combo on base layer (e.g., `RH1` + `RH2`, BSPC + NAV) — sends IME activation keycodes and toggles to naginata layer
-- **Exit naginata mode:** combo on naginata layer (e.g., two specific keys) — sends IME deactivation and returns to base layer
-
-```c
-// Macros for entering/exiting naginata mode
-ZMK_MACRO(ng_on,  bindings = <&kp LANGUAGE_1 &kp INTERNATIONAL_4 &to NAGINATA>;)
-ZMK_MACRO(ng_off, bindings = <&kp LANGUAGE_2 &kp INTERNATIONAL_5 &to BASE>;)
-```
-
-### macOS Setup Required
-- Add "Japanese - Romaji" or "Kana" input source in System Settings
-- The naginata module sends keycodes that the OS IME interprets
-
----
-
 ## Directional Consistency
 
 All directional controls use `RM1`/`RM2`/`RM3`/`RM4` (n/e/i/o, right hand home row, zero finger movement):
@@ -477,11 +363,6 @@ Two adjacent thumb keys on one hand activate a layer on the opposite hand. One t
 | `LH1` + `LH0` (TAB + SPACE) | Left | Right | MEDIA |
 | `RH0` + `RH1` (ENTER + BSPC) | Right | Left | SYSTEM |
 | `LB5` + `RB5` (ESC + TMUX) | Both pinkies | Both | DANGER |
-
-**Naginata toggle:**
-| Combo | Layer |
-|---|---|
-| `RH1` + `RH2` (BSPC + NAV) | NAGINATA (toggle on/off) |
 
 ---
 
@@ -516,7 +397,6 @@ ZMK doesn't support runtime profile switching, but we can:
 | MOUSE toggle via `LH2` + `RH0` | Both hands free for mouse control |
 | ADJ split into FN/MEDIA/SYSTEM/DANGER | Focused layers, ergonomic two-thumb access |
 | SYM right bottom row → operators | Media moved to dedicated MEDIA layer |
-| Naginata layer | Japanese kana via zmk-naginata module |
 | Base layer combos for ~ \| ` _ | High-frequency symbols without layer switch |
 | SYM reorganized | Terminal symbols promoted, coding symbols retained |
 | Q+W → ESC combo removed | Redundant with ESC pinky key |
@@ -539,7 +419,5 @@ Resolved:
 
 - [x] ADJ split into FN, MEDIA, SYSTEM, DANGER layers
 - [x] Two-thumb layer access design
-- [x] Japanese input — naginata-style via zmk-naginata module
-
 Open:
 - [ ] VIM layer design (deferred until neovim usage increases)
