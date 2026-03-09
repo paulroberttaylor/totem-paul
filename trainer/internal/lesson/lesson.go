@@ -16,15 +16,15 @@ type Stage struct {
 }
 
 func HomeRow() Stage {
-	return Stage{Name: "home_row", Keys: []string{"a", "r", "s", "t", "d", "h", "n", "e", "i", "o"}}
+	return Stage{Name: "home_row", Keys: []string{"a", "r", "s", "t", "g", "m", "n", "e", "i", "o"}}
 }
 
 func TopRow() Stage {
-	return Stage{Name: "top_row", Keys: []string{"q", "w", "f", "p", "g", "j", "l", "u", "y", ";"}}
+	return Stage{Name: "top_row", Keys: []string{"q", "w", "f", "p", "b", "j", "l", "u", "y", ";"}}
 }
 
 func BottomRow() Stage {
-	return Stage{Name: "bottom_row", Keys: []string{"z", "x", "c", "v", "b", "k", "m", ",", ".", "/"}}
+	return Stage{Name: "bottom_row", Keys: []string{"z", "x", "c", "d", "v", "k", "h", ",", ".", "/"}}
 }
 
 func FullAlpha() Stage {

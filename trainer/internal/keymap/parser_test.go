@@ -35,7 +35,7 @@ func TestParseKeymap_LayerNames(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ParseFile: %v", err)
 	}
-	want := []string{"BASE", "NAV", "SYM", "ADJ"}
+	want := []string{"BASE", "NAV", "NUM", "SYM"}
 	for i, name := range want {
 		if km.Layers[i].Name != name {
 			t.Errorf("layer %d: want name %q, got %q", i, name, km.Layers[i].Name)
@@ -60,13 +60,17 @@ func TestParseKeymap_BaseLayerKeys(t *testing.T) {
 		hold string
 		char string
 	}{
-		{0, "kp", "Q", "", "q"},          // Q
+		{0, "kp", "Q", "", "q"},           // Q
+		{4, "kp", "B", "", "b"},           // B (Colemak DHm)
 		{9, "kp", "SEMI", "", ";"},        // ;
-		{10, "mt", "A", "LGUI", "a"},      // A/GUI
+		{10, "mt", "A", "LALT", "a"},      // A/ALT
+		{12, "mt", "S", "LGUI", "s"},      // S/GUI
 		{13, "mt", "T", "LSHFT", "t"},     // T/SHFT
-		{20, "kp", "ESC", "", ""},          // ESC (not typeable)
-		{33, "lt", "TAB", "NAV", ""},       // TAB/NAV (layer tap)
-		{34, "kp", "SPACE", "", " "},       // SPACE
+		{20, "kp", "ESC", "", ""},         // ESC (not typeable)
+		{24, "kp", "D", "", "d"},          // D (Colemak DHm — bottom row)
+		{27, "kp", "H", "", "h"},          // H (Colemak DHm — bottom row)
+		{33, "lt", "TAB", "NAV", ""},      // TAB/NAV (layer tap)
+		{34, "kp", "SPACE", "", " "},      // SPACE
 	}
 
 	for _, tt := range tests {
@@ -86,20 +90,20 @@ func TestParseKeymap_BaseLayerKeys(t *testing.T) {
 	}
 }
 
-func TestParseKeymap_NAVLayerNumbers(t *testing.T) {
+func TestParseKeymap_NUMLayerNumbers(t *testing.T) {
 	km, err := ParseFile(testKeymapPath(t))
 	if err != nil {
 		t.Fatalf("ParseFile: %v", err)
 	}
-	nav := km.Layers[1]
+	num := km.Layers[2] // NUM is now layer 2
 
 	// Position 6 should be 7 (N7)
-	if nav.Bindings[6].Char != "7" {
-		t.Errorf("NAV pos 6: want char '7', got %q", nav.Bindings[6].Char)
+	if num.Bindings[6].Char != "7" {
+		t.Errorf("NUM pos 6: want char '7', got %q", num.Bindings[6].Char)
 	}
-	// Position 36 should be 0 (N0)
-	if nav.Bindings[36].Char != "0" {
-		t.Errorf("NAV pos 36: want char '0', got %q", nav.Bindings[36].Char)
+	// Position 19 should be 0 (N0) — right pinky home row
+	if num.Bindings[19].Char != "0" {
+		t.Errorf("NUM pos 19: want char '0', got %q", num.Bindings[19].Char)
 	}
 }
 
@@ -108,7 +112,7 @@ func TestParseKeymap_SYMLayerSymbols(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ParseFile: %v", err)
 	}
-	sym := km.Layers[2]
+	sym := km.Layers[3] // SYM is now layer 3
 
 	// Position 0 should be !
 	if sym.Bindings[0].Char != "!" {
@@ -125,14 +129,26 @@ func TestParseKeymap_Combos(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ParseFile: %v", err)
 	}
-	if len(km.Combos) != 1 {
-		t.Fatalf("want 1 combo, got %d", len(km.Combos))
+	if len(km.Combos) != 4 {
+		t.Fatalf("want 4 combos, got %d", len(km.Combos))
 	}
-	c := km.Combos[0]
-	if c.Name != "combo_esc" {
-		t.Errorf("combo name: want 'combo_esc', got %q", c.Name)
+
+	// Verify combo names and outputs
+	wantCombos := []struct {
+		name   string
+		output string
+	}{
+		{"combo_tilde", "~"},
+		{"combo_pipe", "|"},
+		{"combo_backtick", "`"},
+		{"combo_underscore", "_"},
 	}
-	if len(c.Positions) != 2 || c.Positions[0] != 0 || c.Positions[1] != 1 {
-		t.Errorf("combo positions: want [0,1], got %v", c.Positions)
+	for i, want := range wantCombos {
+		if km.Combos[i].Name != want.name {
+			t.Errorf("combo %d: want name %q, got %q", i, want.name, km.Combos[i].Name)
+		}
+		if km.Combos[i].Output != want.output {
+			t.Errorf("combo %d: want output %q, got %q", i, want.output, km.Combos[i].Output)
+		}
 	}
 }

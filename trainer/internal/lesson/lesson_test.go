@@ -7,8 +7,8 @@ import (
 func TestStageKeys(t *testing.T) {
 	s := HomeRow()
 	keys := s.Keys
-	// Colemak DH home row
-	want := []string{"a", "r", "s", "t", "d", "h", "n", "e", "i", "o"}
+	// Colemak DHm home row
+	want := []string{"a", "r", "s", "t", "g", "m", "n", "e", "i", "o"}
 	if len(keys) != len(want) {
 		t.Fatalf("home row: want %d keys, got %d", len(want), len(keys))
 	}

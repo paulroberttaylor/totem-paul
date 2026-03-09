@@ -38,12 +38,12 @@ func (m menuModel) update(msg tea.Msg) (menuModel, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "j", "down":
+		case "j", "n", "down":
 			m.cursor++
 			if m.cursor >= len(m.choices) {
 				m.cursor = len(m.choices) - 1
 			}
-		case "k", "up":
+		case "k", "e", "up":
 			m.cursor--
 			if m.cursor < 0 {
 				m.cursor = 0
@@ -81,7 +81,7 @@ func (m menuModel) view(width, height int) string {
 	}
 
 	b.WriteString("\n")
-	b.WriteString(helpStyle.Render("j/k: navigate • enter: select • q: quit"))
+	b.WriteString(helpStyle.Render("n/e: navigate • enter: select • q: quit"))
 
 	content := b.String()
 	return lipgloss.Place(width, height, lipgloss.Center, lipgloss.Center, content)

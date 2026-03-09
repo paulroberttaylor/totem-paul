@@ -48,15 +48,15 @@ func TestIntegration_KeymapToLesson(t *testing.T) {
 	}
 	t.Logf("home row exercise: %q", exercise)
 
-	// Verify NAV layer has numbers
-	nav := km.Layers[1]
+	// Verify NUM layer has numbers (layer index 2)
+	num := km.Layers[2]
 	var nums []string
-	for _, k := range nav.Bindings {
+	for _, k := range num.Bindings {
 		if k.Char >= "0" && k.Char <= "9" {
 			nums = append(nums, k.Char)
 		}
 	}
 	if len(nums) != 10 {
-		t.Errorf("NAV layer should have 10 numbers, got %d: %v", len(nums), nums)
+		t.Errorf("NUM layer should have 10 numbers, got %d: %v", len(nums), nums)
 	}
 }

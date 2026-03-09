@@ -31,12 +31,12 @@ func (m pickerModel) update(msg tea.Msg) (pickerModel, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "j", "down":
+		case "j", "n", "down":
 			m.cursor++
 			if m.cursor >= len(m.stages) {
 				m.cursor = len(m.stages) - 1
 			}
-		case "k", "up":
+		case "k", "e", "up":
 			m.cursor--
 			if m.cursor < 0 {
 				m.cursor = 0
@@ -74,7 +74,7 @@ func (m pickerModel) view(width, height int) string {
 	}
 
 	b.WriteString("\n")
-	b.WriteString(pickerHelpStyle.Render("j/k: navigate • enter: start • esc: back"))
+	b.WriteString(pickerHelpStyle.Render("n/e: navigate • enter: start • esc: back"))
 
 	content := b.String()
 	return lipgloss.Place(width, height, lipgloss.Center, lipgloss.Center, content)
