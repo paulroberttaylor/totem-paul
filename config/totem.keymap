@@ -76,10 +76,10 @@
             layers = <BASE>;
         };
 
-        // Mouse toggle: both inner thumbs LH0 + RH0 (SPACE + ENTER)
+        // Mouse toggle: both outer pinkies ESC + TMUX (positions 20 + 31)
         combo_mouse {
             timeout-ms = <150>;
-            key-positions = <34 35>;
+            key-positions = <20 31>;
             bindings = <&tog MOUSE>;
         };
     };
@@ -102,12 +102,12 @@
 //             q       w       f       p       b           j       l       u       y       ;
 //   ESC       a/GUI   r/ALT   s/CTL   t/SFT   g           m       n/SFT   e/CTL   i/ALT   o/GUI   TMUX
 //             z       x       c       d       v           k       h       ,       .       /
-//                             DEL/NUM TAB/NAV SPACE       ENTER   BSPC/SYM DEL
+//                             DEL/NUM TAB/NAV SPACE       BSPC/SYM ENTER  DEL
             bindings = <
                 &kp Q       &kp W       &kp F       &kp P       &kp B           &kp J       &kp L       &kp U       &kp Y       &kp SEMI
                 &mt LALT A  &mt LCTRL R &mt LGUI S  &mt LSHFT T &kp G           &kp M       &mt RSHFT N &mt RGUI E  &mt RCTRL I &mt RALT O
     &kp ESC     &kp Z       &kp X       &kp C       &kp D       &kp V           &kp K       &kp H       &kp COMMA   &kp DOT     &kp FSLH    &tmux_prefix
-                                        &lt NUM DEL &lt NAV TAB  &kp SPACE       &kp RET     &lt SYM BSPC &kp FSLH
+                                        &lt NUM DEL &lt NAV TAB  &kp SPACE       &lt SYM BSPC &kp RET    &kp DEL
             >;
         };
 

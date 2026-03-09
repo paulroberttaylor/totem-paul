@@ -25,8 +25,8 @@ func TestParseKeymap_LayerCount(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ParseFile: %v", err)
 	}
-	if len(km.Layers) != 4 {
-		t.Errorf("want 4 layers, got %d", len(km.Layers))
+	if len(km.Layers) != 5 {
+		t.Errorf("want 5 layers, got %d", len(km.Layers))
 	}
 }
 
@@ -129,8 +129,8 @@ func TestParseKeymap_Combos(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ParseFile: %v", err)
 	}
-	if len(km.Combos) != 4 {
-		t.Fatalf("want 4 combos, got %d", len(km.Combos))
+	if len(km.Combos) != 5 {
+		t.Fatalf("want 5 combos, got %d", len(km.Combos))
 	}
 
 	// Verify combo names and outputs
@@ -142,6 +142,7 @@ func TestParseKeymap_Combos(t *testing.T) {
 		{"combo_pipe", "|"},
 		{"combo_backtick", "`"},
 		{"combo_underscore", "_"},
+		{"combo_mouse", ""},  // tog, no typeable output
 	}
 	for i, want := range wantCombos {
 		if km.Combos[i].Name != want.name {
