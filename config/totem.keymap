@@ -84,7 +84,7 @@
                 &kp Q       &kp W       &kp F       &kp P       &kp B           &kp J       &kp L       &kp U       &kp Y       &kp SEMI
                 &mt LALT A  &mt LCTRL R &mt LGUI S  &mt LSHFT T &kp G           &kp M       &mt RSHFT N &mt RGUI E  &mt RCTRL I &mt RALT O
     &kp ESC     &kp Z       &kp X       &kp C       &kp D       &kp V           &kp K       &kp H       &kp COMMA   &kp DOT     &kp FSLH    &tmux_prefix
-                                        &lt NUM DEL &lt NAV TAB  &kp SPACE       &kp RET     &lt SYM BSPC &kp DEL
+                                        &lt NUM DEL &lt NAV TAB  &kp SPACE       &kp RET     &lt SYM BSPC &kp FSLH
             >;
         };
 
