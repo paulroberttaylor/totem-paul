@@ -89,6 +89,33 @@ var charToKeyLabel = map[rune]string{
 	'\'': "'", '"': "\"", '\\': "\\",
 }
 
+// symChars are characters that live on the SYM layer.
+var symChars = map[rune]bool{
+	'!': true, '@': true, '#': true, '$': true, '%': true,
+	'^': true, '&': true, '*': true, '\'': true, '"': true,
+	'~': true, '`': true, '_': true, '|': true, '{': true,
+	'}': true, '\\': true, '(': true, ')': true, '[': true,
+	']': true, '-': true, '+': true, '=': true, '<': true,
+	'>': true,
+}
+
+// numChars are characters that live on the NUM layer.
+var numChars = map[rune]bool{
+	'0': true, '1': true, '2': true, '3': true, '4': true,
+	'5': true, '6': true, '7': true, '8': true, '9': true,
+}
+
+// LayerForChar returns the appropriate keyboard layout based on a typed character.
+func LayerForChar(r rune) TotemLayout {
+	if symChars[r] {
+		return SymLayer()
+	}
+	if numChars[r] {
+		return NumLayer()
+	}
+	return BaseLayer()
+}
+
 // BlankTotem returns a layout with all blank keys.
 func BlankTotem() TotemLayout {
 	return TotemLayout{

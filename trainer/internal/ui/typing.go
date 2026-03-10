@@ -181,12 +181,15 @@ func (m typingModel) view(width, height int) string {
 	b.WriteString(typingHelp.Render("esc: quit"))
 
 	b.WriteString("\n\n")
-	layout := LayerForStage(m.stage)
-	layout.Highlight = m.lastTyped
-	// Show next expected key
+	// Show the layer that contains the next character to type
+	var layout TotemLayout
 	if m.pos < len(exerciseRunes) {
+		layout = LayerForChar(exerciseRunes[m.pos])
 		layout.Next = CharToLabel(exerciseRunes[m.pos])
+	} else {
+		layout = BaseLayer()
 	}
+	layout.Highlight = m.lastTyped
 	b.WriteString(RenderKeyboard(layout))
 
 	content := b.String()
