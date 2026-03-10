@@ -212,28 +212,28 @@ Numpad on right hand. Left hand has mods.
 
 ---
 
-### SYM (Layer 3) — Hold right middle thumb `RH1` (BSPC/SYM)
+### SYM (Layer 3) — Hold right inner thumb `RH0` (BSPC/SYM)
 
 ```
       ┌─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┐
-      │  !  │  @  │  #  │  $  │  %  │   │  ^  │  &  │  *  │  '  │  "  │
+      │  @  │  #  │  $  │  %  │  ^  │   │  &  │  *  │  +  │  <  │  >  │
 ┌─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┐
-│ ___ │  ~  │  `  │  _  │  |  │  {  │   │  }  │SHIFT│ CTRL│ ALT │ GUI │ ___ │
+│  £  │  ~  │  |  │  `  │  '  │  "  │   │  !  │  {  │  }  │  -  │  =  │ ___ │
 └─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┘
-      │  \  │  (  │  )  │  [  │  ]  │   │  -  │  +  │  =  │  <  │  >  │
+      │  \  │  (  │  )  │  [  │  ]  │   │  _  │  ;  │  :  │  ?  │ ___ │
       └─────┴─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┴─────┘
                   ┌─────┬─────┬─────┐   ┌─────┬─────┬─────┐
-                  │ ___ │ ___ │ ___ │   │ ___ │█████│ ___ │
+                  │ ___ │ ___ │ ___ │   │█████│ ___ │ ___ │
                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
 ```
 
 **Design rationale:**
-- **`~`, `` ` ``, `_`, `|` on left home row** — most-used terminal symbols, best finger positions
-- **Brackets grouped logically on left** — `{}` on home inner, `()` on bottom middle, `[]` on bottom inner. All pairs adjacent.
-- **Right home row = one-shot mods** — allows SYM + modifier combos without contortion
-- **Right bottom row = operators** — `-`, `+`, `=`, `<`, `>` for coding (media moved to MEDIA layer)
-- **`\` on left bottom pinky** — available but not prime real estate
-- **`'` and `"` on right top** — easy access for shell quoting
+- **`~ | ` ' "` on left home row** — most-used terminal symbols at fingertips
+- **`! { } - =` on right home row** — bang, braces, operators (replaces wasted mods)
+- **`£` on left pinky extra** — easy access without taking a prime position
+- **Brackets grouped on left bottom** — `()` middle, `[]` inner, `\` pinky
+- **`_ ; : ?` on right bottom** — useful characters accessible but not prime
+- **`@ # $ % ^` on top left, `& * + < >` on top right** — less frequent symbols
 
 ---
 

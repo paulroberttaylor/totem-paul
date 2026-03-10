@@ -96,7 +96,7 @@ var symChars = map[rune]bool{
 	'~': true, '`': true, '_': true, '|': true, '{': true,
 	'}': true, '\\': true, '(': true, ')': true, '[': true,
 	']': true, '-': true, '+': true, '=': true, '<': true,
-	'>': true,
+	'>': true, ';': true, ':': true, '?': true, '£': true,
 }
 
 // numChars are characters that live on the NUM layer.
@@ -138,9 +138,9 @@ func BaseLayer() TotemLayout {
 func SymLayer() TotemLayout {
 	return TotemLayout{
 		Title:  "SYM (hold inner right thumb)",
-		Top:    [10]string{"!", "@", "#", "$", "%", "^", "&", "*", "'", "\""},
-		Home:   [12]string{"", "~", "`", "_", "|", "{", "}", "SFT", "GUI", "CTL", "ALT", ""},
-		Bottom: [10]string{"\\", "(", ")", "[", "]", "-", "+", "=", "<", ">"},
+		Top:    [10]string{"@", "#", "$", "%", "^", "&", "*", "+", "<", ">"},
+		Home:   [12]string{"£", "~", "|", "`", "'", "\"", "!", "{", "}", "-", "=", ""},
+		Bottom: [10]string{"\\", "(", ")", "[", "]", "_", ";", ":", "?", ""},
 		Thumbs: [6]string{"", "", "", "███", "", ""},
 	}
 }

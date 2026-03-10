@@ -84,12 +84,18 @@
         };
     };
 
-    // TMUX prefix macro — sends Ctrl+B
     macros {
+        // TMUX prefix — sends Ctrl+B
         tmux_prefix: tmux_prefix {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings = <&macro_tap &kp LC(B)>;
+        };
+        // Pound sign £ — Option+3 on macOS
+        pound: pound {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp LA(N3)>;
         };
     };
 
@@ -143,15 +149,15 @@
 
         sym_layer {
             label = "SYM";
-// Symbols — hold BSPC (right middle thumb)
-//             !       @       #       $       %           ^       &       *       '       "
-//   ___       ~       `       _       |       {           }       SHIFT   CTRL    ALT     GUI     ___
-//             \       (       )       [       ]           -       +       =       <       >
-//                             ___     ___     ___         ___     ███     ___
+// Symbols — hold BSPC (right inner thumb)
+//             @       #       $       %       ^           &       *       +       <       >
+//   £        ~       |       `       '       "           !       {       }       -       =       ___
+//             \       (       )       [       ]           _       ;       :       ?       ___
+//                             ___     ___     ___         ███     ___     ___
             bindings = <
-                &kp EXCL    &kp AT      &kp HASH    &kp DLLR    &kp PRCNT       &kp CARET   &kp AMPS    &kp ASTRK   &kp SQT     &kp DQT
-                &kp TILDE   &kp GRAVE   &kp UNDER   &kp PIPE    &kp LBRC        &kp RBRC    &kp RSHFT   &kp RGUI    &kp RCTRL   &kp RALT
-    &trans      &kp BSLH    &kp LPAR    &kp RPAR    &kp LBKT    &kp RBKT        &kp MINUS   &kp PLUS    &kp EQUAL   &kp LT      &kp GT      &trans
+                &kp AT      &kp HASH    &kp DLLR    &kp PRCNT   &kp CARET       &kp AMPS    &kp ASTRK   &kp PLUS    &kp LT      &kp GT
+                &kp TILDE   &kp PIPE    &kp GRAVE   &kp SQT     &kp DQT         &kp EXCL    &kp LBRC    &kp RBRC    &kp MINUS   &kp EQUAL
+    &pound      &kp BSLH    &kp LPAR    &kp RPAR    &kp LBKT    &kp RBKT        &kp UNDER   &kp SEMI    &kp COLON   &kp QMARK   &trans      &trans
                                         &trans      &trans      &trans          &trans      &trans      &trans
             >;
         };
