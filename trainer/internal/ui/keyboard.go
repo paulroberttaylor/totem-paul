@@ -52,6 +52,17 @@ func BlankTotem() TotemLayout {
 	}
 }
 
+// BaseLayer returns the Colemak DHm base layer layout.
+func BaseLayer() TotemLayout {
+	return TotemLayout{
+		Title:  "BASE",
+		Top:    [10]string{"q", "w", "f", "p", "b", "j", "l", "u", "y", ";"},
+		Home:   [12]string{"ESC", "a", "r", "s", "t", "g", "m", "n", "e", "i", "o", "TMX"},
+		Bottom: [10]string{"z", "x", "c", "d", "v", "k", "h", ",", ".", "/"},
+		Thumbs: [6]string{"DEL", "TAB", "SPC", "BSP", "ENT", "DEL"},
+	}
+}
+
 func renderKey(label string, style lipgloss.Style) string {
 	if label == "" {
 		label = " "
