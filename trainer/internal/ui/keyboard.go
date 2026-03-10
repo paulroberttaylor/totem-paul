@@ -110,7 +110,7 @@ func BaseLayer() TotemLayout {
 // SymLayer returns the SYM layer layout.
 func SymLayer() TotemLayout {
 	return TotemLayout{
-		Title:  "SYM (hold BSPC)",
+		Title:  "SYM (hold inner right thumb)",
 		Top:    [10]string{"!", "@", "#", "$", "%", "^", "&", "*", "'", "\""},
 		Home:   [12]string{"", "~", "`", "_", "|", "{", "}", "SFT", "GUI", "CTL", "ALT", ""},
 		Bottom: [10]string{"\\", "(", ")", "[", "]", "-", "+", "=", "<", ">"},
