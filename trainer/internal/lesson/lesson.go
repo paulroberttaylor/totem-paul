@@ -166,36 +166,35 @@ func TerminalSnippets() []string {
 	}
 }
 
-// SymbolSnippets returns exercises focused on SYM layer characters.
+// SymbolSnippets returns exercises focused on pure SYM layer characters.
+// Every character here is on the SYM layer — no base-layer letters or punctuation.
 func SymbolSnippets() []string {
 	return []string{
-		// Quoting
-		"'hello'", "\"world\"", "'it's'", "\"don't\"",
-		// Brackets and braces
-		"{}", "[]", "()", "{key: 'value'}", "[1, 2, 3]",
-		"(a + b)", "{name: \"paul\"}", "map[string]int{}",
-		// Pipes and redirects
-		"cmd | grep", "a | b | c", "echo 'hi' | cat",
-		// Tilde and paths
-		"~/docs", "~/.config", "~/projects/totem",
-		// Common operators
-		"a + b", "x - y", "n = 0", "i += 1", "a == b",
-		"x != y", "a >= b", "c <= d",
-		// Backtick
-		"`date`", "`pwd`", "`echo hi`",
-		// Underscore
-		"my_var", "file_name", "snake_case",
-		// Ampersand and caret
-		"a & b", "a ^ b", "x && y",
-		// At sign and hash
-		"@user", "#comment", "@override",
-		// Dollar and percent
-		"$HOME", "$PATH", "50%", "${var}",
-		// Mixed symbol drills
-		"if (x > 0) {}", "fn(a, b)", "arr[i] = val",
-		"!true", "*ptr", "&ref",
-		"key: 'val'", "{a: [1, 2]}",
-		"(x + y) * z", "a || b && c",
+		// Quoting pairs
+		"''", "\"\"", "' '", "\" \"",
+		// Bracket pairs
+		"{}", "[]", "()", "(())", "[[]]", "{{}}",
+		"[()]", "{[]}", "({[]})",
+		// Operators
+		"+ -", "= +", "- =", "+ = -",
+		"< >", "<= >=", "< = >",
+		"+ - = < >",
+		// Tilde and backtick
+		"~ ~", "` `", "~ ` ~", "`` ~ ``",
+		// Underscore and pipe
+		"_ _", "| |", "_ | _", "| _ |",
+		// Mixed drills
+		"! @ # $ %", "^ & * ' \"",
+		"~ ` _ | {", "} + - = <",
+		"! ' \" ( )", "[ ] { } \\",
+		// Realistic patterns (SYM chars only)
+		"!= ==", "|| &&", "<< >>",
+		"#{}", "${}", "!()", "@[]",
+		"'_'", "\"_\"", "|>", "<|",
+		"(*)", "[*]", "{*}",
+		"+ = - < > ! @ # $ %",
+		"^ & * ~ ` _ | \\ ' \"",
+		"( ) [ ] { } + - = <",
 	}
 }
 
