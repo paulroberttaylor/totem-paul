@@ -181,7 +181,7 @@ func (m typingModel) view(width, height int) string {
 	b.WriteString(typingHelp.Render("esc: quit"))
 
 	b.WriteString("\n\n")
-	layout := BaseLayer()
+	layout := LayerForStage(m.stage)
 	layout.Highlight = m.lastTyped
 	// Show next expected key
 	if m.pos < len(exerciseRunes) {

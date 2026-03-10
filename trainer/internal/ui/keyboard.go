@@ -86,6 +86,7 @@ type TotemLayout struct {
 // charToKeyLabel maps a typed character to its label on the keyboard.
 var charToKeyLabel = map[rune]string{
 	' ': "SPC", '\t': "TAB", '\n': "ENT", '\b': "BSP",
+	'\'': "'", '"': "\"", '\\': "\\",
 }
 
 // BlankTotem returns a layout with all blank keys.
@@ -103,6 +104,40 @@ func BaseLayer() TotemLayout {
 		Home:   [12]string{"ESC", "a", "r", "s", "t", "g", "m", "n", "e", "i", "o", "TMX"},
 		Bottom: [10]string{"z", "x", "c", "d", "v", "k", "h", ",", ".", "/"},
 		Thumbs: [6]string{"DEL", "TAB", "SPC", "BSP", "ENT", "DEL"},
+	}
+}
+
+// SymLayer returns the SYM layer layout.
+func SymLayer() TotemLayout {
+	return TotemLayout{
+		Title:  "SYM (hold BSPC)",
+		Top:    [10]string{"!", "@", "#", "$", "%", "^", "&", "*", "'", "\""},
+		Home:   [12]string{"", "~", "`", "_", "|", "{", "}", "SFT", "GUI", "CTL", "ALT", ""},
+		Bottom: [10]string{"\\", "(", ")", "[", "]", "-", "+", "=", "<", ">"},
+		Thumbs: [6]string{"", "", "", "", "███", ""},
+	}
+}
+
+// NumLayer returns the NUM layer layout.
+func NumLayer() TotemLayout {
+	return TotemLayout{
+		Title:  "NUM (hold DEL)",
+		Top:    [10]string{"", "", "", "", "", "`", "7", "8", "9", "~"},
+		Home:   [12]string{"", "ALT", "CTL", "GUI", "SFT", "", "-", "4", "5", "6", "0", ""},
+		Bottom: [10]string{"", "", "", "", "", "/", "1", "2", "3", "."},
+		Thumbs: [6]string{"███", "", "", "=", "+", ""},
+	}
+}
+
+// LayerForStage returns the appropriate keyboard layout for a given stage name.
+func LayerForStage(stage string) TotemLayout {
+	switch stage {
+	case "symbols":
+		return SymLayer()
+	case "numbers":
+		return NumLayer()
+	default:
+		return BaseLayer()
 	}
 }
 

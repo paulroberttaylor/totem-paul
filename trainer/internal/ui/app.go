@@ -62,7 +62,7 @@ type App struct {
 // NewApp creates the top-level app model.
 func NewApp(km *keymap.Keymap) App {
 	configDir := stats.ConfigDir()
-	histPath := filepath.Join(configDir, "history.json")
+	histPath := filepath.Join(configDir, "history.jsonl")
 	h := stats.NewHistory(histPath)
 
 	return App{
@@ -99,16 +99,24 @@ func (a App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case startLessonMsg:
 		stage := msg.stage
-		allowed := make(map[string]bool)
-		for _, k := range stage.Keys {
-			allowed[k] = true
-		}
-		allowed[" "] = true
-		words := lesson.FilterWords(lesson.CommonWords(), allowed)
-		exercise := lesson.GenerateExercise(words, 15)
-		if exercise == "" {
-			// Fallback for stages without word matches (numbers, symbols)
+		var exercise string
+		switch stage.Name {
+		case "symbols":
+			snippets := lesson.SymbolSnippets()
+			exercise = lesson.GenerateExercise(snippets, 10)
+		case "numbers":
 			exercise = lesson.GenerateExercise(stage.Keys, 20)
+		default:
+			allowed := make(map[string]bool)
+			for _, k := range stage.Keys {
+				allowed[k] = true
+			}
+			allowed[" "] = true
+			words := lesson.FilterWords(lesson.CommonWords(), allowed)
+			exercise = lesson.GenerateExercise(words, 15)
+			if exercise == "" {
+				exercise = lesson.GenerateExercise(stage.Keys, 20)
+			}
 		}
 		a.typing = newTypingModel(exercise, stage.Name)
 		a.current = screenTyping
