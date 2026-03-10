@@ -16,12 +16,48 @@ var (
 
 	blankKeyStyle = keyStyle.Foreground(lipgloss.Color("245"))
 
+	highlightKeyStyle = lipgloss.NewStyle().
+				Width(5).
+				Height(1).
+				Align(lipgloss.Center).
+				Border(lipgloss.RoundedBorder()).
+				BorderForeground(lipgloss.Color("10")).
+				Foreground(lipgloss.Color("10")).
+				Bold(true)
+
+	nextKeyStyle = lipgloss.NewStyle().
+			Width(5).
+			Height(1).
+			Align(lipgloss.Center).
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("75")).
+			Foreground(lipgloss.Color("75")).
+			Bold(true)
+
 	thumbKeyStyle = lipgloss.NewStyle().
 			Width(5).
 			Height(1).
 			Align(lipgloss.Center).
 			Border(lipgloss.RoundedBorder()).
 			BorderForeground(lipgloss.Color("99"))
+
+	thumbHighlightStyle = lipgloss.NewStyle().
+				Width(5).
+				Height(1).
+				Align(lipgloss.Center).
+				Border(lipgloss.RoundedBorder()).
+				BorderForeground(lipgloss.Color("10")).
+				Foreground(lipgloss.Color("10")).
+				Bold(true)
+
+	thumbNextStyle = lipgloss.NewStyle().
+			Width(5).
+			Height(1).
+			Align(lipgloss.Center).
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("75")).
+			Foreground(lipgloss.Color("75")).
+			Bold(true)
 
 	// Invisible placeholder to fill the empty corners
 	emptyCell = lipgloss.NewStyle().
@@ -38,11 +74,18 @@ var (
 // TotemLayout holds the key labels for rendering the Totem keyboard.
 // Empty strings render as blank keys.
 type TotemLayout struct {
-	Title  string
-	Top    [10]string // 5 left + 5 right
-	Home   [12]string // 1 pinky + 5 left + 5 right + 1 pinky
-	Bottom [10]string // 5 left + 5 right
-	Thumbs [6]string  // 3 left + 3 right
+	Title     string
+	Top       [10]string // 5 left + 5 right
+	Home      [12]string // 1 pinky + 5 left + 5 right + 1 pinky
+	Bottom    [10]string // 5 left + 5 right
+	Thumbs    [6]string  // 3 left + 3 right
+	Highlight string     // key label to highlight (last pressed)
+	Next      string     // key label to highlight as next target
+}
+
+// charToKeyLabel maps a typed character to its label on the keyboard.
+var charToKeyLabel = map[rune]string{
+	' ': "SPC", '\t': "TAB", '\n': "ENT", '\b': "BSP",
 }
 
 // BlankTotem returns a layout with all blank keys.
@@ -63,16 +106,38 @@ func BaseLayer() TotemLayout {
 	}
 }
 
-func renderKey(label string, style lipgloss.Style) string {
+// CharToLabel converts a typed rune to its keyboard label.
+func CharToLabel(r rune) string {
+	if label, ok := charToKeyLabel[r]; ok {
+		return label
+	}
+	return strings.ToLower(string(r))
+}
+
+func pickStyle(label, highlight, next string, normal, hlStyle, nxStyle lipgloss.Style) lipgloss.Style {
+	lower := strings.ToLower(label)
+	if highlight != "" && lower == strings.ToLower(highlight) {
+		return hlStyle
+	}
+	if next != "" && lower == strings.ToLower(next) {
+		return nxStyle
+	}
+	return normal
+}
+
+func renderKey(label, highlight, next string, normal, hlStyle, nxStyle lipgloss.Style) string {
 	if label == "" {
 		label = " "
 	}
+	style := pickStyle(label, highlight, next, normal, hlStyle, nxStyle)
 	return style.Render(label)
 }
 
 // RenderKeyboard draws the Totem split keyboard layout.
 func RenderKeyboard(layout TotemLayout) string {
 	var rows []string
+	hl := layout.Highlight
+	nx := layout.Next
 
 	if layout.Title != "" {
 		rows = append(rows, keyboardTitle.Render(layout.Title))
@@ -82,8 +147,8 @@ func RenderKeyboard(layout TotemLayout) string {
 	leftTop := make([]string, 5)
 	rightTop := make([]string, 5)
 	for i := 0; i < 5; i++ {
-		leftTop[i] = renderKey(layout.Top[i], blankKeyStyle)
-		rightTop[i] = renderKey(layout.Top[5+i], blankKeyStyle)
+		leftTop[i] = renderKey(layout.Top[i], hl, nx, blankKeyStyle, highlightKeyStyle, nextKeyStyle)
+		rightTop[i] = renderKey(layout.Top[5+i], hl, nx, blankKeyStyle, highlightKeyStyle, nextKeyStyle)
 	}
 	topRow := lipgloss.JoinHorizontal(lipgloss.Center,
 		emptyCell,
@@ -98,15 +163,15 @@ func RenderKeyboard(layout TotemLayout) string {
 	leftHome := make([]string, 5)
 	rightHome := make([]string, 5)
 	for i := 0; i < 5; i++ {
-		leftHome[i] = renderKey(layout.Home[1+i], blankKeyStyle)
-		rightHome[i] = renderKey(layout.Home[6+i], blankKeyStyle)
+		leftHome[i] = renderKey(layout.Home[1+i], hl, nx, blankKeyStyle, highlightKeyStyle, nextKeyStyle)
+		rightHome[i] = renderKey(layout.Home[6+i], hl, nx, blankKeyStyle, highlightKeyStyle, nextKeyStyle)
 	}
 	homeRow := lipgloss.JoinHorizontal(lipgloss.Center,
-		renderKey(layout.Home[0], blankKeyStyle),
+		renderKey(layout.Home[0], hl, nx, blankKeyStyle, highlightKeyStyle, nextKeyStyle),
 		lipgloss.JoinHorizontal(lipgloss.Center, leftHome...),
 		"   ",
 		lipgloss.JoinHorizontal(lipgloss.Center, rightHome...),
-		renderKey(layout.Home[11], blankKeyStyle),
+		renderKey(layout.Home[11], hl, nx, blankKeyStyle, highlightKeyStyle, nextKeyStyle),
 	)
 	rows = append(rows, homeRow)
 
@@ -114,8 +179,8 @@ func RenderKeyboard(layout TotemLayout) string {
 	leftBot := make([]string, 5)
 	rightBot := make([]string, 5)
 	for i := 0; i < 5; i++ {
-		leftBot[i] = renderKey(layout.Bottom[i], blankKeyStyle)
-		rightBot[i] = renderKey(layout.Bottom[5+i], blankKeyStyle)
+		leftBot[i] = renderKey(layout.Bottom[i], hl, nx, blankKeyStyle, highlightKeyStyle, nextKeyStyle)
+		rightBot[i] = renderKey(layout.Bottom[5+i], hl, nx, blankKeyStyle, highlightKeyStyle, nextKeyStyle)
 	}
 	bottomRow := lipgloss.JoinHorizontal(lipgloss.Center,
 		emptyCell,
@@ -130,8 +195,8 @@ func RenderKeyboard(layout TotemLayout) string {
 	leftThumbs := make([]string, 3)
 	rightThumbs := make([]string, 3)
 	for i := 0; i < 3; i++ {
-		leftThumbs[i] = renderKey(layout.Thumbs[i], thumbKeyStyle)
-		rightThumbs[i] = renderKey(layout.Thumbs[3+i], thumbKeyStyle)
+		leftThumbs[i] = renderKey(layout.Thumbs[i], hl, nx, thumbKeyStyle, thumbHighlightStyle, thumbNextStyle)
+		rightThumbs[i] = renderKey(layout.Thumbs[3+i], hl, nx, thumbKeyStyle, thumbHighlightStyle, thumbNextStyle)
 	}
 	thumbRow := lipgloss.JoinHorizontal(lipgloss.Center,
 		lipgloss.JoinHorizontal(lipgloss.Center, leftThumbs...),

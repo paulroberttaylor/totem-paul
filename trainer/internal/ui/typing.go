@@ -21,16 +21,17 @@ var (
 )
 
 type typingModel struct {
-	exercise string
-	stage    string
-	input    []rune   // what the user has typed (parallel to exercise runes)
-	correct  []bool   // whether each typed rune was correct
-	pos      int      // current cursor position in the exercise
-	session  *stats.Session
-	started  bool
-	start    time.Time
-	lastKey  time.Time
-	done     bool
+	exercise  string
+	stage     string
+	input     []rune   // what the user has typed (parallel to exercise runes)
+	correct   []bool   // whether each typed rune was correct
+	pos       int      // current cursor position in the exercise
+	session   *stats.Session
+	started   bool
+	start     time.Time
+	lastKey   time.Time
+	done      bool
+	lastTyped string   // label of last key pressed (for keyboard highlight)
 }
 
 func newTypingModel(exercise, stage string) typingModel {
@@ -104,6 +105,7 @@ func (m typingModel) update(msg tea.Msg) (typingModel, tea.Cmd) {
 		isCorrect := typed == expected
 		m.input = append(m.input, typed)
 		m.correct = append(m.correct, isCorrect)
+		m.lastTyped = CharToLabel(typed)
 
 		// Track stats.
 		m.session.TotalChars++
@@ -179,7 +181,13 @@ func (m typingModel) view(width, height int) string {
 	b.WriteString(typingHelp.Render("esc: quit"))
 
 	b.WriteString("\n\n")
-	b.WriteString(RenderKeyboard(BaseLayer()))
+	layout := BaseLayer()
+	layout.Highlight = m.lastTyped
+	// Show next expected key
+	if m.pos < len(exerciseRunes) {
+		layout.Next = CharToLabel(exerciseRunes[m.pos])
+	}
+	b.WriteString(RenderKeyboard(layout))
 
 	content := b.String()
 	return lipgloss.Place(width, height, lipgloss.Center, lipgloss.Center, content)
