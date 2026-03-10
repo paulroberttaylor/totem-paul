@@ -141,14 +141,14 @@ func SymLayer() TotemLayout {
 		Top:    [10]string{"!", "@", "#", "$", "%", "^", "&", "*", "'", "\""},
 		Home:   [12]string{"", "~", "`", "_", "|", "{", "}", "SFT", "GUI", "CTL", "ALT", ""},
 		Bottom: [10]string{"\\", "(", ")", "[", "]", "-", "+", "=", "<", ">"},
-		Thumbs: [6]string{"", "", "", "", "███", ""},
+		Thumbs: [6]string{"", "", "", "███", "", ""},
 	}
 }
 
 // NumLayer returns the NUM layer layout.
 func NumLayer() TotemLayout {
 	return TotemLayout{
-		Title:  "NUM (hold DEL)",
+		Title:  "NUM (hold outer left thumb)",
 		Top:    [10]string{"", "", "", "", "", "`", "7", "8", "9", "~"},
 		Home:   [12]string{"", "ALT", "CTL", "GUI", "SFT", "", "-", "4", "5", "6", "0", ""},
 		Bottom: [10]string{"", "", "", "", "", "/", "1", "2", "3", "."},
