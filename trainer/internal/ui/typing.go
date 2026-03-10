@@ -178,6 +178,9 @@ func (m typingModel) view(width, height int) string {
 	b.WriteString("\n")
 	b.WriteString(typingHelp.Render("esc: quit"))
 
+	b.WriteString("\n\n")
+	b.WriteString(RenderKeyboard(BlankTotem()))
+
 	content := b.String()
 	return lipgloss.Place(width, height, lipgloss.Center, lipgloss.Center, content)
 }
