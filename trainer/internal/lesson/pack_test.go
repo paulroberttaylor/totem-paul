@@ -125,6 +125,25 @@ func TestLoadPacks_EmptyDir(t *testing.T) {
 	}
 }
 
+func TestEmbeddedPacksLoad(t *testing.T) {
+	packs := EmbeddedPacks()
+	if len(packs) == 0 {
+		t.Fatal("expected at least one embedded pack")
+	}
+	found := false
+	for _, p := range packs {
+		if p.Name == "Apex" {
+			found = true
+			if len(p.RawStages) < 2 {
+				t.Errorf("Apex pack has %d stages, want >= 2", len(p.RawStages))
+			}
+		}
+	}
+	if !found {
+		t.Fatal("expected Apex embedded pack")
+	}
+}
+
 func TestLoadPacks_NonexistentDir(t *testing.T) {
 	packs, errs := LoadPacks("/nonexistent/path/that/does/not/exist")
 	if len(packs) != 0 {

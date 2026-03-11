@@ -204,6 +204,13 @@ func SymbolSnippets() []string {
 // AllStagesWithPacks returns built-in stages plus any stages from pack files in dir.
 func AllStagesWithPacks(dir string) ([]Stage, []error) {
 	stages := AllStages()
+
+	// Load embedded packs first (always available)
+	for _, p := range EmbeddedPacks() {
+		stages = append(stages, p.Stages()...)
+	}
+
+	// Then load user packs from disk (can override/extend)
 	packs, errs := LoadPacks(dir)
 	for _, p := range packs {
 		stages = append(stages, p.Stages()...)

@@ -1,12 +1,40 @@
 package lesson
 
 import (
+	"embed"
 	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
 )
+
+//go:embed packs/*.json
+var embeddedPacksFS embed.FS
+
+// EmbeddedPacks loads all packs embedded in the binary.
+func EmbeddedPacks() []Pack {
+	entries, err := embeddedPacksFS.ReadDir("packs")
+	if err != nil {
+		return nil
+	}
+	var packs []Pack
+	for _, e := range entries {
+		if e.IsDir() || filepath.Ext(e.Name()) != ".json" {
+			continue
+		}
+		data, err := embeddedPacksFS.ReadFile("packs/" + e.Name())
+		if err != nil {
+			continue
+		}
+		var p Pack
+		if err := json.Unmarshal(data, &p); err != nil || p.Name == "" {
+			continue
+		}
+		packs = append(packs, p)
+	}
+	return packs
+}
 
 // Pack represents a JSON stage pack loaded from disk.
 type Pack struct {
