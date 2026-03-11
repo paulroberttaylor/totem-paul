@@ -2,6 +2,7 @@ package ui
 
 import (
 	"fmt"
+	"math/rand"
 	"path/filepath"
 	"time"
 
@@ -65,12 +66,15 @@ func NewApp(km *keymap.Keymap) App {
 	histPath := filepath.Join(configDir, "history.jsonl")
 	h := stats.NewHistory(histPath)
 
+	packsDir := filepath.Join(configDir, "packs")
+	stages, _ := lesson.AllStagesWithPacks(packsDir)
+
 	return App{
 		keymap:  km,
 		history: h,
 		current: screenMenu,
 		menu:    newMenuModel(),
-		picker:  newPickerModel(),
+		picker:  newPickerModel(stages),
 	}
 }
 
@@ -112,10 +116,20 @@ func (a App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				allowed[k] = true
 			}
 			allowed[" "] = true
-			words := lesson.FilterWords(lesson.CommonWords(), allowed)
+			var wordPool []string
+			if len(stage.Words) > 0 {
+				wordPool = stage.Words
+			} else {
+				wordPool = lesson.CommonWords()
+			}
+			words := lesson.FilterWords(wordPool, allowed)
 			exercise = lesson.GenerateExercise(words, 15)
 			if exercise == "" {
-				exercise = lesson.GenerateExercise(stage.Keys, 20)
+				if len(stage.Snippets) > 0 {
+					exercise = stage.Snippets[rand.Intn(len(stage.Snippets))]
+				} else {
+					exercise = lesson.GenerateExercise(stage.Keys, 20)
+				}
 			}
 		}
 		a.typing = newTypingModel(exercise, stage.Name)

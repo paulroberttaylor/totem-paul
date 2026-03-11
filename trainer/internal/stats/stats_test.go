@@ -38,7 +38,7 @@ func TestSession_WPM(t *testing.T) {
 
 func TestHistory_SaveLoad(t *testing.T) {
 	dir := t.TempDir()
-	path := filepath.Join(dir, "history.json")
+	path := filepath.Join(dir, "history.jsonl")
 	h := NewHistory(path)
 
 	session := SessionRecord{

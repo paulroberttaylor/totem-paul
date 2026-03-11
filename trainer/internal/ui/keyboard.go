@@ -96,7 +96,7 @@ var symChars = map[rune]bool{
 	'~': true, '`': true, '_': true, '|': true, '{': true,
 	'}': true, '\\': true, '(': true, ')': true, '[': true,
 	']': true, '-': true, '+': true, '=': true, '<': true,
-	'>': true, ';': true, ':': true, '?': true, '£': true,
+	'>': true, ';': true, ':': true, '?': true,
 }
 
 // numChars are characters that live on the NUM layer.

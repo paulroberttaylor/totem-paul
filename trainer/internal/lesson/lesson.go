@@ -11,8 +11,11 @@ var commonWordsRaw string
 
 // Stage defines a set of keys to practice.
 type Stage struct {
-	Name string
-	Keys []string // typeable characters in this stage
+	Name     string
+	Keys     []string // typeable characters in this stage
+	Pack     string   // empty for built-in stages
+	Words    []string // nil = use CommonWords()
+	Snippets []string // nil = use TerminalSnippets()
 }
 
 func HomeRow() Stage {
@@ -196,6 +199,16 @@ func SymbolSnippets() []string {
 		"^ & * ~ ` _ | \\ ' \"",
 		"( ) [ ] { } + - = <",
 	}
+}
+
+// AllStagesWithPacks returns built-in stages plus any stages from pack files in dir.
+func AllStagesWithPacks(dir string) ([]Stage, []error) {
+	stages := AllStages()
+	packs, errs := LoadPacks(dir)
+	for _, p := range packs {
+		stages = append(stages, p.Stages()...)
+	}
+	return stages, errs
 }
 
 // CommonWords returns the embedded list of common English words.

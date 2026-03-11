@@ -1,0 +1,49 @@
+{
+  "name": "Apex",
+  "description": "Salesforce Apex language practice",
+  "words": [
+    "public", "private", "protected", "global",
+    "class", "interface", "extends", "implements",
+    "void", "return", "static", "final",
+    "trigger", "before", "after", "insert", "update", "delete",
+    "List", "Map", "Set", "String", "Integer", "Boolean",
+    "Account", "Contact", "Lead", "Opportunity",
+    "SOQL", "DML", "batch", "queueable", "future",
+    "try", "catch", "throw", "new", "null",
+    "if", "else", "for", "while", "do",
+    "override", "virtual", "abstract", "with", "sharing"
+  ],
+  "stages": [
+    {
+      "name": "keywords",
+      "keys": [
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+        "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+      ]
+    },
+    {
+      "name": "snippets",
+      "keys": [
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+        "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+        "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+        ".", ";", "(", ")", "{", "}", "[", "]", "<", ">",
+        " ", "=", "'", ",", ":", "@"
+      ],
+      "snippets": [
+        "List<Account> accs = [SELECT Id FROM Account];",
+        "public class MyController {",
+        "Map<Id, Contact> contactMap = new Map<Id, Contact>();",
+        "for (Account a : accs) {",
+        "trigger AccountTrigger on Account (before insert, after update) {",
+        "public static void processRecords(List<SObject> records) {",
+        "Database.insert(records, false);",
+        "String query = 'SELECT Id, Name FROM Account';",
+        "if (Trigger.isInsert && Trigger.isBefore) {",
+        "global class BatchProcessor implements Database.Batchable<SObject> {"
+      ]
+    }
+  ]
+}

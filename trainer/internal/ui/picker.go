@@ -10,10 +10,11 @@ import (
 )
 
 var (
-	pickerTitleStyle = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("205")).MarginBottom(1)
-	stageNameStyle   = lipgloss.NewStyle().Bold(true)
-	stageKeysStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("241"))
-	pickerHelpStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("241")).MarginTop(1)
+	pickerTitleStyle  = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("205")).MarginBottom(1)
+	stageNameStyle    = lipgloss.NewStyle().Bold(true)
+	stageKeysStyle    = lipgloss.NewStyle().Foreground(lipgloss.Color("241"))
+	pickerHelpStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("241")).MarginTop(1)
+	packHeaderStyle   = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("214")).MarginTop(1)
 )
 
 type pickerModel struct {
@@ -21,9 +22,9 @@ type pickerModel struct {
 	stages []lesson.Stage
 }
 
-func newPickerModel() pickerModel {
+func newPickerModel(stages []lesson.Stage) pickerModel {
 	return pickerModel{
-		stages: lesson.AllStages(),
+		stages: stages,
 	}
 }
 
@@ -56,7 +57,15 @@ func (m pickerModel) view(width, height int) string {
 	b.WriteString(pickerTitleStyle.Render("Select a Lesson"))
 	b.WriteString("\n\n")
 
+	lastPack := ""
 	for i, stage := range m.stages {
+		// Show pack group header when pack changes
+		if stage.Pack != lastPack && stage.Pack != "" {
+			b.WriteString(packHeaderStyle.Render(fmt.Sprintf("── %s ──", stage.Pack)))
+			b.WriteString("\n")
+		}
+		lastPack = stage.Pack
+
 		keyPreview := strings.Join(stage.Keys, " ")
 		if len(keyPreview) > 40 {
 			keyPreview = keyPreview[:37] + "..."
