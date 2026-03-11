@@ -2,7 +2,6 @@ package ui
 
 import (
 	"fmt"
-	"math/rand"
 	"path/filepath"
 	"time"
 
@@ -104,30 +103,32 @@ func (a App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case startLessonMsg:
 		stage := msg.stage
 		var exercise string
-		switch stage.Name {
-		case "symbols":
-			snippets := lesson.SymbolSnippets()
-			exercise = lesson.GenerateExercise(snippets, 10)
-		case "numbers":
-			exercise = lesson.GenerateExercise(stage.Keys, 20)
-		default:
-			allowed := make(map[string]bool)
-			for _, k := range stage.Keys {
-				allowed[k] = true
-			}
-			allowed[" "] = true
-			var wordPool []string
-			if len(stage.Words) > 0 {
-				wordPool = stage.Words
-			} else {
-				wordPool = lesson.CommonWords()
-			}
-			words := lesson.FilterWords(wordPool, allowed)
-			exercise = lesson.GenerateExercise(words, 15)
-			if exercise == "" {
-				if len(stage.Snippets) > 0 {
-					exercise = stage.Snippets[rand.Intn(len(stage.Snippets))]
+
+		if len(stage.Snippets) > 0 {
+			// Snippet-first: pick a random snippet to type verbatim
+			exercise = lesson.GenerateSnippetExercise(stage.Snippets)
+		} else {
+			switch stage.Name {
+			case "symbols":
+				snippets := lesson.SymbolSnippets()
+				exercise = lesson.GenerateExercise(snippets, 10)
+			case "numbers":
+				exercise = lesson.GenerateExercise(stage.Keys, 20)
+			default:
+				allowed := make(map[string]bool)
+				for _, k := range stage.Keys {
+					allowed[k] = true
+				}
+				allowed[" "] = true
+				var wordPool []string
+				if len(stage.Words) > 0 {
+					wordPool = stage.Words
 				} else {
+					wordPool = lesson.CommonWords()
+				}
+				words := lesson.FilterWords(wordPool, allowed)
+				exercise = lesson.GenerateExercise(words, 15)
+				if exercise == "" {
 					exercise = lesson.GenerateExercise(stage.Keys, 20)
 				}
 			}

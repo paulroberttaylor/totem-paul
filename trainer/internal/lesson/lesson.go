@@ -211,6 +211,14 @@ func AllStagesWithPacks(dir string) ([]Stage, []error) {
 	return stages, errs
 }
 
+// GenerateSnippetExercise picks a random snippet from the list.
+func GenerateSnippetExercise(snippets []string) string {
+	if len(snippets) == 0 {
+		return ""
+	}
+	return snippets[rand.Intn(len(snippets))]
+}
+
 // CommonWords returns the embedded list of common English words.
 func CommonWords() []string {
 	var words []string

@@ -7,6 +7,25 @@ import (
 	"github.com/paul/totem-trainer/internal/keymap"
 )
 
+func TestSnippetStageUsesSnippets(t *testing.T) {
+	stage := Stage{
+		Name:     "test_snippets",
+		Keys:     []string{"a", "b"},
+		Snippets: []string{"abc def", "ghi jkl"},
+	}
+	found := false
+	for i := 0; i < 20; i++ {
+		ex := GenerateSnippetExercise(stage.Snippets)
+		if ex == "abc def" || ex == "ghi jkl" {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Fatal("expected exercise to be one of the snippets")
+	}
+}
+
 func TestIntegration_KeymapToLesson(t *testing.T) {
 	// Parse the actual keymap
 	path, err := filepath.Abs(filepath.Join("..", "..", "..", "config", "totem.keymap"))
