@@ -42,7 +42,32 @@
         "Database.insert(records, false);",
         "String query = 'SELECT Id, Name FROM Account';",
         "if (Trigger.isInsert && Trigger.isBefore) {",
-        "global class BatchProcessor implements Database.Batchable<SObject> {"
+        "global class BatchProcessor implements Database.Batchable<SObject> {",
+        "public with sharing class AccountService {",
+        "private without sharing class DataMigration {",
+        "List<Contact> contacts = [SELECT Id, Name, Email FROM Contact WHERE AccountId = :accId LIMIT 100];",
+        "List<Opportunity> opps = [SELECT Id, Amount, StageName FROM Opportunity ORDER BY CloseDate DESC LIMIT 10];",
+        "List<Account> accsWithContacts = [SELECT Id, (SELECT Id, Name FROM Contacts) FROM Account WHERE Industry = 'Technology'];",
+        "try { insert newRecords; } catch (DmlException e) { System.debug(e.getMessage()); }",
+        "try { update accounts; } catch (DmlException e) { for (Integer i = 0; i < e.getNumDml(); i++) { System.debug(e.getDmlMessage(i)); } }",
+        "@isTest static void testInsertAccount() { Account a = new Account(Name = 'Test'); insert a; System.assertNotEquals(null, a.Id); }",
+        "Test.startTest(); MyBatch b = new MyBatch(); Database.executeBatch(b); Test.stopTest();",
+        "System.assertEquals(expected, actual, 'Values should match');",
+        "for (Account acc : Trigger.new) { acc.Description = 'Updated'; }",
+        "Map<Id, Account> oldMap = Trigger.oldMap; for (Account acc : Trigger.new) { if (acc.Status__c != oldMap.get(acc.Id).Status__c) { changed.add(acc); } }",
+        "global Database.QueryLocator start(Database.BatchableContext bc) { return Database.getQueryLocator('SELECT Id FROM Account'); }",
+        "public class AsyncProcessor implements Queueable { public void execute(QueueableContext ctx) { } }",
+        "Integer queryCount = Limits.getQueries(); System.debug('Queries used: ' + queryCount + ' of ' + Limits.getLimitQueries());",
+        "public String Name { get; set; }",
+        "public Integer Count { get; private set; }",
+        "public enum Season { WINTER, SPRING, SUMMER, FALL }",
+        "public interface Notifier { void send(String message); }",
+        "public class EmailNotifier implements Notifier { public void send(String message) { } }",
+        "Set<Id> accountIds = new Set<Id>(); for (Contact c : contacts) { accountIds.add(c.AccountId); }",
+        "Map<Id, List<Contact>> accToContacts = new Map<Id, List<Contact>>();",
+        "Database.SaveResult[] results = Database.insert(records, false); for (Database.SaveResult sr : results) { if (!sr.isSuccess()) { System.debug(sr.getErrors()); } }",
+        "@future(callout=true) public static void makeCallout(Set<Id> recordIds) { }",
+        "AggregateResult[] results = [SELECT AccountId, COUNT(Id) cnt FROM Contact GROUP BY AccountId HAVING COUNT(Id) > 5];"
       ]
     }
   ]
